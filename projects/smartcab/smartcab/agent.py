@@ -54,9 +54,13 @@ class LearningAgent(Agent):
 
     def update_q_table(self, action, reward):
         q_state = self.state, action
+        a = 0.3 # learning rate
+        discount = 0.9
         if q_state in self.q_table:
             # print "old q", q_state, self.q_table[q_state]
-            self.q_table[q_state] = 0.8 * self.q_table[q_state] + 0.2 * reward
+            self.q_table[q_state] = \
+                (1 - a) * self.q_table[q_state] + \
+                a * (reward + discount * max(self.get_q_values(self.get_next_state()))) #???
         else:
             # print "new q state", q_state
             self.q_table[q_state] = 0.8 * random.randint(-5, 5) + 0.2 * reward
